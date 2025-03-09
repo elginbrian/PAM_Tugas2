@@ -53,7 +53,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                     display.text = currentText
                 }
                 if (currentText.isNotEmpty() && currentText.last() in listOf('+', '-', '*', '/')) {
-                    display.text = currentText.dropLast(1) + opText
+                    display.text = buildString {
+                        append(currentText.dropLast(1))
+                        append(opText)
+                    }
                 } else {
                     display.append(opText)
                 }
@@ -70,11 +73,9 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun animateButtonClick(button: MaterialButton) {
-        // Ubah warna tombol menjadi kuning dan teks menjadi hitam
         button.backgroundTintList = ColorStateList.valueOf(Color.YELLOW)
         button.setTextColor(Color.BLACK)
 
-        // Setelah 150ms, kembalikan warna tombol ke abu-abu (#757575) dan teks ke putih
         button.postDelayed({
             button.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#757575"))
             button.setTextColor(Color.WHITE)
