@@ -1,5 +1,7 @@
 package com.elginbrian.pamtugas2
 
+import android.app.Activity
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -9,6 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
 class MainActivity : AppCompatActivity(), View.OnClickListener {
+
+    companion object {
+        private const val REQUEST_CODE_RADIO = 1001
+    }
 
     private lateinit var display: TextView
 
@@ -28,6 +34,11 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
 
         buttonIds.forEach { id ->
             findViewById<MaterialButton>(id).setOnClickListener(this)
+        }
+
+        findViewById<MaterialButton>(R.id.btnRadioCalc)?.setOnClickListener {
+            val intent = Intent(this, RadioCalcActivity::class.java)
+            startActivityForResult(intent, REQUEST_CODE_RADIO)
         }
     }
 
@@ -120,5 +131,15 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
             i += 2
         }
         return result
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == REQUEST_CODE_RADIO && resultCode == Activity.RESULT_OK) {
+            val result = data?.getDoubleExtra("result", 0.0)
+            result?.let {
+                it.toString().also { display.text = it }
+            }
+        }
     }
 }
